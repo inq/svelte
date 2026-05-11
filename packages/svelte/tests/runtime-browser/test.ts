@@ -85,12 +85,16 @@ async function run_test(
 				name: 'testing-runtime-browser',
 				setup(build) {
 					build.onLoad({ filter: /\.svelte$/ }, (args) => {
-						const compiled = compile(fs.readFileSync(args.path, 'utf-8').replace(/\r/g, ''), {
+						const source = fs.readFileSync(args.path, 'utf-8').replace(/\r/g, '');
+						const is_ce_dir = test_dir.includes('custom-elements-samples');
+						const compiled = compile(source, {
 							generate: 'client',
 							fragments,
 							...config.compileOptions,
 							immutable: config.immutable,
-							customElement: test_dir.includes('custom-elements-samples'),
+							customElement: config.per_file_custom_element
+								? /<svelte:options[\s\S]*?customElement/.test(source)
+								: is_ce_dir,
 							accessors: 'accessors' in config ? config.accessors : true
 						});
 
@@ -147,11 +151,15 @@ async function run_test(
 						});
 
 						build.onLoad({ filter: /\.svelte$/ }, (args) => {
-							const compiled = compile(fs.readFileSync(args.path, 'utf-8').replace(/\r/g, ''), {
+							const source = fs.readFileSync(args.path, 'utf-8').replace(/\r/g, '');
+							const is_ce_dir = test_dir.includes('custom-elements-samples');
+							const compiled = compile(source, {
 								generate: 'server',
 								...config.compileOptions,
 								immutable: config.immutable,
-								customElement: test_dir.includes('custom-elements-samples'),
+								customElement: config.per_file_custom_element
+									? /<svelte:options[\s\S]*?customElement/.test(source)
+									: is_ce_dir,
 								accessors: 'accessors' in config ? config.accessors : true
 							});
 

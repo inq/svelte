@@ -160,6 +160,7 @@ function normalize_children(node) {
  *	immutable?: boolean;
  *	dev?: boolean;
  *	warnings?: Warning[];
+ *	per_file_custom_element?: boolean;
  *}} args
  */
 export function test(args) {

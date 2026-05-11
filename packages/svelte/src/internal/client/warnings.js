@@ -236,6 +236,18 @@ export function select_multiple_invalid_value() {
 }
 
 /**
+ * Component with scoped CSS `%hash%` is rendered inside a shadow root but its CSS is not — the bundler extracted it into a top-level stylesheet that can't cross the shadow boundary
+ * @param {string} hash
+ */
+export function shadow_css_missing(hash) {
+	if (DEV) {
+		console.warn(`%c[svelte] shadow_css_missing\n%cComponent with scoped CSS \`${hash}\` is rendered inside a shadow root but its CSS is not — the bundler extracted it into a top-level stylesheet that can't cross the shadow boundary\nhttps://svelte.dev/e/shadow_css_missing`, bold, normal);
+	} else {
+		console.warn(`https://svelte.dev/e/shadow_css_missing`);
+	}
+}
+
+/**
  * Reactive `$state(...)` proxies and the values they proxy have different identities. Because of this, comparisons with `%operator%` will produce unexpected results
  * @param {string} operator
  */

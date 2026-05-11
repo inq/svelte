@@ -2,7 +2,7 @@ export { createAttachmentKey as attachment } from '../../attachments/index.js';
 export { FILENAME, HMR, NAMESPACE_SVG } from '../../constants.js';
 export { push, pop, add_svelte_meta } from './context.js';
 export { assign, assign_async } from './dev/assign.js';
-export { cleanup_styles } from './dev/css.js';
+export { check_shadow_css, cleanup_styles } from './dev/css.js';
 export { add_locations } from './dev/elements.js';
 export { hmr } from './dev/hmr.js';
 export { create_ownership_validator } from './dev/ownership.js';

@@ -419,15 +419,21 @@ export function client_component(analysis, options) {
 		}
 	}
 
-	if (analysis.css.ast !== null && analysis.inject_styles) {
+	if (analysis.css.ast !== null) {
 		const hash = b.literal(analysis.css.hash);
-		const code = b.literal(render_stylesheet(analysis.source, analysis, options).code);
 
-		state.hoisted.push(b.const('$$css', b.object([b.init('hash', hash), b.init('code', code)])));
+		if (analysis.inject_styles) {
+			const code = b.literal(render_stylesheet(analysis.source, analysis, options).code);
 
-		component_block.body.unshift(
-			b.stmt(b.call('$.append_styles', b.id('$$anchor'), b.id('$$css')))
-		);
+			state.hoisted.push(b.const('$$css', b.object([b.init('hash', hash), b.init('code', code)])));
+
+			component_block.body.unshift(
+				b.stmt(b.call('$.append_styles', b.id('$$anchor'), b.id('$$css')))
+			);
+		} else if (dev) {
+			// see #18199
+			component_block.body.unshift(b.stmt(b.call('$.check_shadow_css', b.id('$$anchor'), hash)));
+		}
 	}
 
 	// we want the cleanup function for the stores to run as the very last thing

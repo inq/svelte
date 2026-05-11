@@ -320,6 +320,19 @@ To silence the warning, ensure that `value`:
 - is an array for an explicit selection
 - is `null` or `undefined` to keep the selection as is
 
+### shadow_css_missing
+
+```
+Component with scoped CSS `%hash%` is rendered inside a shadow root but its CSS is not — the bundler extracted it into a top-level stylesheet that can't cross the shadow boundary
+```
+
+This happens when a regular Svelte component (no `<svelte:options customElement>`) is rendered inside a custom element. The nested component's CSS is returned as a separate string and extracted by the bundler (e.g. `vite-plugin-svelte` with `emitCss: true`) into a top-level `.css` file, so it never reaches the shadow root.
+
+To fix, configure all components to inline their CSS:
+
+- set `compilerOptions.customElement: true` or `compilerOptions.css: 'injected'` in `svelte.config.js`, or
+- set `emitCss: false` on `vite-plugin-svelte`
+
 ### state_proxy_equality_mismatch
 
 ```
